@@ -2,19 +2,23 @@
 // that will send back the index.html file on a GET request to '/'
 // it should then send back jsonData on a GET to /data
 var express = require('express');
-var fs = require('fs');
+var app = express();
 
 var jsonData = {count: 12, message: 'hey'};
 
-var app = express();
-
 app.get('/', function(req, res) {
-  var filePath = "./index.html";
-  fs.createReadStream(filePath).pipe(res);
+  res.sendFile(__dirname + '/index.html', function(err) {
+    if (err) {
+      res.status(500).send(err);
+    }
+  });
 });
 
 app.get('/data', function(req, res) {
   res.json(jsonData);
 });
 
-app.listen(3000);
+var port = 3000;
+app.listen(port, function(){
+  console.log("listen on Port " + port);
+});
